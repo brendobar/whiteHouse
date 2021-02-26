@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="rus">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>whitehouse - Furniture Ecommerce Template | Shop</title>
+
+    <link rel="icon" href="img/core-img/favicon.ico">
+
+    <link rel="stylesheet" href="css/core-style.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/shop.js"></script>
+    
+
+
+        <div class="hidden">
+            <div class="cng_form">
+
+                <form id="form-login" action="js/login.php" method="POST">
+                    <input type="text" name="name" placeholder="Логин" required></input><br>
+                    <input type="password" name="passwd" placeholder="Пароль" required></input><br>
+                    <button id="log_in">Войти</button>
+                    <p class="message">Нет аккаунта? <a href="#form-register" class="reg2">Регистрация</a></p>
+
+                </form>
+
+
+                <form id="form-register" action="js/register.php" method="POST">
+                    <input type="text" name="name" placeholder="Почта" required></input><br>
+                    <input type="text" name="passwd" placeholder="Пароль" required></input><br>
+                    <input type="text" name="address" placeholder="Адрес" required></input><br>
+                    <button id="send_r">Зарегестрироватся</button>
+                    <p class="message">Зарегестрированны? <a href="#form-login" class="reg3">Вход</a></p>
+                </form>
+            </div>
+        </div>
+
+
+
+</head>
+
+<body>
+    <div class="main-content-wrapper d-flex clearfix">
+        <div class="mobile-nav">
+            <div class="whitehouse-navbar-brand">
+                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+            </div>
+            <div class="whitehouse-navbar-toggler">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <header class="header-area clearfix">
+            <div class="nav-close">
+                <i class="fa fa-close" aria-hidden="true"></i>
+            </div>
+            <div class="logo">
+                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+            </div>
+            <nav class="whitehouse-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li class="active"><a href="shop.html">Магазин</a></li>
+                    <li><a href="cart.html" class="cart-nav">Корзина <span>(<?php session_start(); 
+                        if(isset($_SESSION['cart'])){echo count($_SESSION['cart']);}else{echo 0;} ?>)</span></a></li>
+                </ul>
+            </nav>
+            <div class="whitehouse-btn-group mt-30 mb-100">
+                <a href="js/logout.php" id="logout"class="btn whitehouse-btn mb-15">Выйти</a>
+            </div>
+            <div class="cart-fav-search mb-100">
+                <a href="#form-login" class="fav-nav" id="cng"><img src="img/core-img/register.png" alt="">Вход/Регистрация</a>
+            </div>
+        </header>
+
+        <div class="shop_sidebar_area">
+            <div class="widget catagory mb-50">
+                <h6 class="widget-title mb-30">Категории</h6>
+                <div class="catagories-menu">
+                    <ul class="cat-m">
+                        <li><a id="all" href="http://whitehouse/shop.html">Все</a></li>
+                        <li><a id="Phone" href="http://whitehouse/shop.html">Телефоны</a></li>
+                        <li><a id="TV" href="http://whitehouse/shop.html">Телевизоры</a></li>
+                        <li><a id="Smart" href="http://whitehouse/shop.html">Гаджеты</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="widget price mb-50">
+                <h6 class="widget-title mb-30">Цена</h6>
+
+                <div class="widget-desc">
+                    <div class="slider-range">
+                        <div data-min="10" data-max="10000000" data-unit="Руб." class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="10" data-value-max="10000000" data-label-result="">
+                            <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
+                            <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" id="pric1"></span>
+                            <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" id="pric2"></span>
+                        </div>
+                        <p class="price range-price" id="price"> 10 - 10000000 Руб.</p>
+                    </div>
+                </div>
+            </div>
+                <div class="whitehouse-btn-group mt-30 mb-100">
+                    <a href="http://whitehouse/shop.html?page=1" id="filter" class="btn whitehouse-btn mb-15">Применить</a>
+                </div>
+            <div>
+                
+            </div>
+        </div>
+
+        <div class="whitehouse_product_area section-padding-100">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-topbar d-xl-flex align-items-end justify-content-between">
+                            <div class="product-sorting d-flex">
+                                <div class="sort-by-date d-flex align-items-center mr-15">
+                                    <p>Sort by</p>
+                                    <select name="select" id="sortByPrice">
+                                        <option value="&price=P">Популярное</option>
+                                        <option value="&price=ASC">Цена ↑</option>
+                                        <option value="&price=DESC">Цена ↓</option>
+                                    </select>
+                                </div>
+                                <div class="view-product d-flex align-items-center">
+                                    <p>View</p>
+                                    <select name="select" id="viewProduct">
+                                        <option value="&limit=6">6</option>
+                                        <option value="&limit=12">12</option>
+                                        <option value="&limit=18">18</option>
+                                        <option value="&limit=24">24</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                <?php
+                    require_once("js/showEvent.php");
+                    showProduct();
+                ?>
+                <div class="row">
+                    <div class="col-12">
+                        <nav aria-label="navigation">
+                            <ul class="pagination justify-content-end mt-50">
+                                <?php
+                                include("js/page.php");
+                                    Page();
+                                ?>                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer_area clearfix">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-4">
+                    <div class="single_widget_area">
+                        <div class="footer-logo mr-50">
+                            <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8">
+                    <div class="single_widget_area">
+                        <div class="footer_menu">
+                            <nav class="navbar navbar-expand-lg justify-content-end">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+                                <div class="collapse navbar-collapse" id="footerNavContent">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="index.html">Главная</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="shop.html">Магазин</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="cart.html">Корзина</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/active.js"></script>
+    <script src="js/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    
+
+
+
+</body>
+
+</html>

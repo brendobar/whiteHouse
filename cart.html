@@ -1,0 +1,279 @@
+    <?php
+session_start();
+function checkGood($arr, $id){
+    if(!$arr){
+        return true;
+    }else{
+        foreach ($arr as $subArr) {
+        $check_id = $subArr['good'];
+        }
+        if($check_id==$id){
+            return false;
+        }else{
+            return true;
+        }
+    }   
+}
+
+
+
+
+if (empty($_SESSION['user'])){
+    header("Location: http://whitehouse/js/logout.php");
+}else{
+    $count = $_POST['quantity'];
+    $id_с = $_POST['addtocart'];
+    $cart=array();
+    
+
+    if(isset($count) || isset($id_c)){
+        $mass = array();
+        if(checkGood($_SESSION['cart'],$_POST['addtocart'])){
+            $mass = array('user' => $_SESSION['user'], 'good' => $id_с, 'count' => $count);
+            array_push($_SESSION['cart'],$mass);
+        }else{
+            echo "<script>alert(\"Этот товар уже в корзине\");</script>";
+        }
+    }
+      foreach( $_SESSION['cart'] as $key){
+                                    if($key['good'] != $_POST['delItem']){
+                                        array_push($cart,$key);
+                                    }
+                                }
+                                $_SESSION['cart']=$cart;  
+}
+
+ 
+?>
+
+
+<!DOCTYPE html>
+<html lang="rus">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>whitehouse - Furniture Ecommerce Template | Cart</title>
+
+    <link rel="icon" href="img/core-img/favicon.ico">
+
+    <link rel="stylesheet" href="css/core-style.css">
+    <link rel="stylesheet" href="style.css">
+
+
+        <div class="hidden">
+            <div class="cng_form">
+
+                <form id="form-login" action="js/login.php" method="POST">
+                    <input type="text" name="name" placeholder="Логин" required></input><br>
+                    <input type="password" name="passwd" placeholder="Пароль" required></input><br>
+                    <button id="log_in">Войти</button>
+                    <p class="message">Нет аккаунта? <a href="#form-register" class="reg2">Регистрация</a></p>
+
+                </form>
+
+
+                <form id="form-register" action="js/register.php" method="POST">
+                    <input type="text" name="name" placeholder="Почта" required></input><br>
+                    <input type="text" name="passwd" placeholder="Пароль" required></input><br>
+                    <input type="text" name="address" placeholder="Адрес" required></input><br>
+                    <button id="send_r">Зарегестрироватся</button>
+                    <p class="message">Зарегестрированны? <a href="#form-login" class="reg3">Вход</a></p>
+                </form>
+            </div>
+        </div>
+
+
+
+</head>
+
+<body>
+
+
+    <div class="main-content-wrapper d-flex clearfix">
+
+        <div class="mobile-nav">
+            <div class="whitehouse-navbar-brand">
+                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+            </div>
+            <div class="whitehouse-navbar-toggler">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <header class="header-area clearfix">
+            <div class="nav-close">
+                <i class="fa fa-close" aria-hidden="true"></i>
+            </div>
+            <div class="logo">
+                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+            </div>
+            <nav class="whitehouse-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="shop.html">Магазин</a></li>
+                    <li class="active"><a href="cart.html" class="cart-nav">Корзина <span>(
+                        <?php 
+                        if(isset($_SESSION['cart'])){
+                            echo count($_SESSION['cart']);
+                        }else{
+                            echo 0;
+                        } 
+                    ?>
+                    )</span></a></li>
+                </ul>
+            </nav>
+            <div class="whitehouse-btn-group mt-30 mb-100">
+                <a href="js/logout.php" id="logout"class="btn whitehouse-btn mb-15">Выйти</a>
+            </div>
+            <div class="cart-fav-search mb-100">
+                <a href="#form-login" class="fav-nav" id="cng"><img src="img/core-img/register.png" alt="">Вход/Регистрация</a>
+            </div>
+        </header>
+
+        <div class="cart-table-area section-padding-100">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <div class="cart-title mt-50">
+                            <h2>Корзина</h2>
+                        </div>
+
+                        <div class="cart-table clearfix">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Наименование</th>
+                                        <th>Цена</th>
+                                        <th>Количество</th>
+                                    </tr>
+                                </thead>
+                              <tbody>
+
+                                    <?php 
+                                    $sum = 0;
+                                    $connection = mysqli_connect("localhost","root","","Shop");
+                                    foreach ($_SESSION['cart'] as $subArr) {
+                                    $I = $subArr['good'];
+                                    
+                                  
+                                    $res = "SELECT * FROM `Product` WHERE `id_Product` = '$I'";
+                                    
+                                    $result = mysqli_query($connection,$res);
+                                    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+                                    
+                                    $id=$row['id_Product'];
+                                    $name=$row['Goods_Name'];
+                                    $price=$row['Price'];
+                                    $amount=$row['Product_Amount'];
+                                    $picture = $row['img'];
+
+                                    $sum+=$price*$subArr['count'];
+                                        ?>
+
+                                      <tr>
+                                        <td class="cart_product_img">
+                                            <a href="#"><img src="<?php echo $picture?>" alt="Product"></a>
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5><?php echo $name?></h5>
+                                        </td>
+                                        <td class="price">
+                                            <span><?php echo $price?></span>
+                                        </td>
+                                        <td class="qty" style="display: contents;">
+                                            <div class="qty-btn d-flex">
+                                                <p>Кол-во</p>
+                                                <div class="quantity">
+                                                    <p class="qty-text" id="qty" value="1"><?php echo $subArr['count'] ?></p>
+                                                </div>
+                                            </div> 
+                                            <form action="" method="POST">
+                                                <input style="background-image: url(img/core-img/del.png) !important;
+                                                width: 2vw !important;
+                                                height: 2vw !important;
+                                                background-size: 65%;
+                                                background-repeat: no-repeat;
+                                                width: 20%;
+                                                background-color: rgba(35, 35, 35, .0);
+                                                color: rgba(35, 35, 35, .0);
+                                                margin-left: 1.5vw;
+                                                border: none;" name="delItem" type="submit" value="<?php  echo $I; ?>" />
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                <?php } ?>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="cart-summary">
+                            <h5>Общая стоимость</h5>
+                            <ul class="summary-table">
+                                <li><span>Цена:</span> <span><?php echo $sum ?> Руб.</span></li>
+                                <li><span>Доставка:</span> <span><?php if($sum==0){$sum1=0;}else{$sum1=300;} echo $sum1; ?> Руб.</span></li>
+                                <li><span>Общая цена:</span> <span class="text-warning"><?php echo $sum+$sum1 ?> Руб.</span></li>
+                            </ul>
+                        </div>
+                        <div class="whitehouse-btn-group mt-30 mb-100">
+                            <a href="js/cart.php" class="btn whitehouse-btn mb-15">Оформить заказ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer_area clearfix">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-4">
+                    <div class="single_widget_area">
+                        <div class="footer-logo mr-50">
+                            <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8">
+                    <div class="single_widget_area">
+                        <div class="footer_menu">
+                            <nav class="navbar navbar-expand-lg justify-content-end">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+                                <div class="collapse navbar-collapse" id="footerNavContent">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="index.html">Главная</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="shop.html">Магазин</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="cart.html">Корзина</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/active.js"></script>
+    <script src="js/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>
